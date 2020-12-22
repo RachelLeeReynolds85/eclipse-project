@@ -1,1 +1,1 @@
-web: gunicorn frontend.app:app
+web: gunicorn eclipse_app.app:app
