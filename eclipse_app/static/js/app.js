@@ -9,9 +9,9 @@ const margin = {
 };
 
 const timelineColumns = {
-    eclipseWidth: 100,
-    poetWidth: 100,
-    poemWidth: 100,
+    eclipseWidth: 300,
+    poetWidth: 300,
+    poemWidth: 300,
 }
 
 
@@ -37,6 +37,7 @@ d3.csv("static/data/data.csv").then((data) => {
 
     yearData = data.map((d) => parseInt(d["year"]))
     intensityData = data.map((d) => parseInt(d["intensity"]))
+    poemScoreData = data.map((d) => parseInt(d["poemscore"]))
 
     var yScale = d3.scaleLinear()
         .domain(d3.extent(yearData))
@@ -49,16 +50,22 @@ d3.csv("static/data/data.csv").then((data) => {
 
     var radiusScale = d3.scaleLinear()
         .domain(d3.extent(intensityData))
-        .range([0, timelineColumns.eclipseWidth / 1.1])
+        .range([0, timelineColumns.eclipseWidth / 3])
 
-    var eclipseArea = timelineG.append("g").classed("eclipse-area",true)
+    var colorScale = d3.scaleLinear()
+        .domain(d3.extent(poemScoreData))
+        .range(["purple", "limegreen"])
+
+    var eclipseArea = timelineG
+        .append("g")
+        .classed("eclipse-area", true)
 
     var moonG = eclipseArea
         .selectAll("g")
         .data(data)
         .enter()
         .append("g")
-        .attr("transform", (d) => `translate (${timelineColumns.eclipseWidth}, ${yScale(parseInt(d.year))})`)
+        .attr("transform", (d) => `translate (${timelineColumns.eclipseWidth / 2}, ${yScale(parseInt(d.year))})`)
     
     moonG
         .append("circle")
@@ -67,5 +74,41 @@ d3.csv("static/data/data.csv").then((data) => {
 
     var poetArea = timelineG
         .append("g")
-        .attr("transform", `translate(${margin.left}, ${margin.top})`)
+        // .attr("transform", `translate(${margin.left}, ${margin.top})`)
+        .classed("poet-area", true)
+    
+    var poetG = poetArea
+        .selectAll("g")
+        .data(data)
+        .enter()
+        .append("g")
+        .attr("transform", (d) => `translate (${timelineColumns.eclipseWidth}, ${yScale(parseInt(d.year))})`)
+
+    poetG
+        .append("text")
+        .text((d) => d.poet)
+        .attr("text-anchor", "middle")
+
+    var poemArea = timelineG
+        .append("g")
+        // .attr("transform", `translate(${margin.left}, ${margin.top})`)
+        .classed("poem-area", true)
+    
+    var poemG = poemArea
+        .selectAll("g")
+        .data(data)
+        .enter()
+        .append("g")
+        .attr("transform", (d) => `translate (${timelineColumns.eclipseWidth + timelineColumns.poetWidth}, ${yScale(parseInt(d.year))})`)
+    
+    poemG
+        .append("circle")
+        .attr("r", 50)
+        .attr("fill", (d) => colorScale(parseInt(d.poemscore)))
+
+    poemG
+        .append("text")
+        .text((d) => d.poemtitle)
+        .attr("text-anchor", "middle")
+        .attr("dy", "50px")
 })
