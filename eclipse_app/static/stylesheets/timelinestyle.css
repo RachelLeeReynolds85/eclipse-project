@@ -1,0 +1,11 @@
+.timeline-axis line{
+    stroke: whitesmoke;
+}
+
+.timeline-axis path{
+    stroke: whitesmoke;
+}
+
+.timeline-axis text{
+    fill: whitesmoke;
+}

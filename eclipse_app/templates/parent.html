@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v5.min.js"></script> 
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/darkstyle.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/timelinestyle.css') }}">
+    <title>Eclipse Poetry</title>
+    
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+        <br>
+        <h1 class="text-center">Art, Science, &amp History Scroller</h1> 
+        <nav>
+            <ul class="list-inline text-center">
+                <li class="list-inline-item"><a href="{{ url_for('index') }}">Eclipses</a></li>
+                <li class="list-inline-item">|</li>
+                <li class="list-inline-item"><a href="{{ url_for('index') }}">Military Memos</a></li>
+                <li class="list-inline-item">|</li>
+                <li class="list-inline-item"><a href="{{ url_for('index') }}">VanGogh</a></li>
+                <li class="list-inline-item">|</li>
+                <li class="list-inline-item"><a href="{{ url_for('index') }}">Cartography</a></li>
+            </ul>
+        </nav>  
+    </div>  
+
+
+    {% block content %}{% endblock%}
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</body>
+
+</html>
