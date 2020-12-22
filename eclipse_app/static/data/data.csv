@@ -1,5 +1,5 @@
 year,eclipse,intensity,poet,poemtitle,poemscore,birth,death
-1800,solar,10,Whitman,O Captain My Captain,50,1819,1892
-1850,solar,50,Dickenson,Kindly Stopped for Me,10,1830,1886
-1900,lunar,80,Angelou,Caged Bird,70,1928,2014
-1950,solar,20,Silverstein,Sidewalk,100,1930,1999
+1800,solar,10,Whitman,O Captain My Captain,.5,1819,1892
+1850,solar,50,Dickinson,Kindly Stopped for Me,.1,1830,1886
+1900,lunar,80,Angelou,Caged Bird,.7,1928,2014
+1950,solar,20,Silverstein,Sidewalk,.99,1930,1999

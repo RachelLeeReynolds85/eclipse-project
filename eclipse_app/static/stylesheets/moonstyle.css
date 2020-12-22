@@ -1,0 +1,8 @@
+.moonLight {
+    fill:             #ffd54f;
+    shape-rendering:  geometricPrecision;
+}
+.moonShade {
+    fill:             #263238;
+    opacity:          0.7;
+}
