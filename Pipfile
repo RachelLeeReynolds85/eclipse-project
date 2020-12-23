@@ -17,7 +17,9 @@ python-dotenv = "*"
 python-dateutil = "*"
 lxml = "*"
 html5lib = "*"
-
+selenium = "*"
+bs4 = "*"
+gazpacho = "*"
 
 [requires]
 python_version = "3.7"
