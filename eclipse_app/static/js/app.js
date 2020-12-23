@@ -159,6 +159,9 @@ d3.csv("static/data/data.csv").then((data) => {
         .attr("dy", "50px")
 })
 
+// --------Supporting functions for drawing eclipse maps-----------
+
+
 
 // --------Supporting functions for drawing moon phases-----------
 function DrawMoonShade(Phase, CX, CY, R) {

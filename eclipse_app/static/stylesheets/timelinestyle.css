@@ -9,3 +9,30 @@
 .timeline-axis text{
     fill: whitesmoke;
 }
+
+.mapboxgl-map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    }
+
+.mapboxgl-canvas-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    }
+
+.mapboxgl-canvas {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 300;
+    height: 300;
+    }
+
+.mapbox-container {
+    position: relative;
+}
+

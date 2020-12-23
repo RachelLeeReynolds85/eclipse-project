@@ -11,6 +11,9 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/darkstyle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/timelinestyle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/moonstyle.css') }}">
+    
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css" rel="stylesheet" />
     <title>Eclipse Poetry</title>
     
 </head>
@@ -33,7 +36,7 @@
 
 
     {% block content %}{% endblock%}
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/newapp.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 

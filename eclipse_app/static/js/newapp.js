@@ -1,5 +1,5 @@
 
-// const data = [1800, 1850, 1900, 1950]
+mapboxgl.accessToken = 'pk.eyJ1IjoicmFjaGVsbGVlcmV5bm9sZHM4NSIsImEiOiJja2Y5dzI4OGYwMTlzMnFwZHFoN2NjanV5In0._9M8fGH_2Ge9l2lextgMLQ'
 
 const margin = {
     top: 100,
@@ -32,37 +32,23 @@ const timelineG = timelineSvg
 	.attr("transform", `translate(${margin.left}, ${margin.top})`)
 	.classed("timeline-group", true)
 
+d3.json("static/data/eclipse_data.json").then((data) => {
+	console.log(data)
 
+	eclipseYears = data.map((d) => parseInt(d["date"].slice(0, 4)))
+	eclipseNames = data.map((d) => d["date"])
+	console.log(eclipseNames)
 
-d3.csv("static/data/data.csv").then((data) => {
-    console.log(data)    
-    
-    yearData = data.map((d) => parseInt(d["year"]))
-    intensityData = data.map((d) => parseInt(d["intensity"]))
-    poemScoreData = data.map((d) => parseFloat(d["poemscore"]))
+	var yScale = d3.scaleLinear()
+	.domain(d3.extent(eclipseYears))
+	.range([0, timelineHeight])
 
-    allYearData = data.map((d) => parseInt(d["year"])).concat(data.map((d) => parseInt(d["birth"]))).concat(data.map((d) => parseInt(d["death"])))
-    console.log(d3.extent(allYearData))
-    console.log(allYearData)
-
-    var yScale = d3.scaleLinear()
-        .domain(d3.extent(allYearData))
-        .range([0, timelineHeight])
-    
-    yAxis = d3.axisLeft(yScale)
+	var yAxis = d3.axisLeft(yScale)
         .tickFormat(d3.format(".0f"))
 
-    yAxisG = timelineG.append("g").call(yAxis).classed("timeline-axis", true)
-
-    var radiusScale = d3.scaleLinear()
-        .domain(d3.extent(intensityData))
-        .range([0, timelineColumns.eclipseWidth / 3])
-
-    var poemScale = d3.scaleLinear()
-        .domain([0, 1])
-        .range([0, 1])
-    
-    // ----- Column for eclipse maps ------------
+	var yAxisG = timelineG.append("g").call(yAxis).classed("timeline-axis", true)
+	
+	// ----- Column for eclipse maps ------------
     var eclipseArea = timelineG
         .append("g")
         .classed("eclipse-area", true)
@@ -70,95 +56,127 @@ d3.csv("static/data/data.csv").then((data) => {
     var eclipseG = eclipseArea
         .selectAll("g")
         .data(data)
-        .enter()
-        .append("g")
-        .attr("transform", (d) => `translate (0, ${yScale(parseInt(d.year))})`)
-    
-    // placeholder for maps of eclipse paths
+		.enter()
+
+	// placeholder for maps of eclipse paths
     eclipseG
-        .append("rect")
+		.append("rect")
+		.attr("transform", (d) => `translate (0, ${yScale(parseInt(d["date"].slice(0, 4)))})`)
         .attr("height", timelineColumns.eclipseHeight)
         .attr("width", timelineColumns.eclipseWidth)
-        .attr("fill", "darkgray")
+		.attr("fill", "darkgray")
+		
+	eclipseG
+        .append("foreignObject")
+		.attr("transform", (d) => `translate (0, ${yScale(parseInt(d["date"].slice(0, 4)))})`)
+		.attr("height", 300)
+		.attr("width", 300)
+		.classed("mapbox-container", true)
+		.append("xhtml:div")
+		.attr("id", (d) => `eclipse-${d.date}`)
+		.attr("height", 300)
+		.attr("width", 300)    
+
+	eclipseNames.forEach(eclipseName => {
+		var map = new mapboxgl.Map({
+			container: `eclipse-${eclipseName}`,
+			style: 'mapbox://styles/mapbox/light-v8',
+			center: [-90, 40],
+			  zoom: 2
+		});
+		// map.on('load', function () {
+		// 	map.resize();
+		// })
+	})
+	// Initialize mapbox
+	// var map = new mapboxgl.Map({
+	// 	container: 
+	// })
+	
+	// ---------- ADD POETS AND POEMS FROM CSV FILE -----------
+	d3.csv("static/data/data.csv").then((data) => {
+		console.log(data)    
+		
+		// yearData = data.map((d) => parseInt(d["year"]))
+		poemScoreData = data.map((d) => parseFloat(d["poemscore"]))
+	
+		// allYearData = data.map((d) => parseInt(d["year"])).concat(data.map((d) => parseInt(d["birth"]))).concat(data.map((d) => parseInt(d["death"])))
+		// console.log(d3.extent(allYearData))
+		// console.log(allYearData)
+	
+	
+		var poemScale = d3.scaleLinear()
+			.domain([0, 1])
+			.range([0, 1])
+	
+		var poetArea = timelineG
+			.append("g")
+			// .attr("transform", `translate(${margin.left}, ${margin.top})`)
+			.classed("poet-area", true)
+		
+		// --------Poet Column-------------
+		var poetG = poetArea
+			.selectAll("g")
+			.data(data)
+			.enter()
+			.append("g")
+			.attr("transform", (d) => `translate (${timelineColumns.eclipseWidth}, ${yScale(parseInt(d.birth))})`)
+	
+		poetG
+			.append("text")
+			.attr("x", timelineColumns.poetWidth / 2)
+			.text((d) => `${d.poet}: ${d.birth}-${d.death}`)
+			.attr("text-anchor", "middle")
+	
+	
+		// -----Poem column of timeline-------
+	
+		var poemArea = timelineG
+			.append("g")
+			// .attr("transform", `translate(${margin.left}, ${margin.top})`)
+			.classed("poem-area", true)
+		
+		// For each poem, create moon icons in phases based on positivity/negativity of poem sentiment analysis
+		moonRad = 50
+		moonPhase = .25
+	
+		var poemG = poemArea
+			.selectAll("g")
+			.data(data)
+			.enter()
+			.append("g")
+			.attr("transform", (d) => `translate (${timelineColumns.eclipseWidth + timelineColumns.poetWidth + timelineColumns.poemWidth / 2}, ${yScale(parseInt(d.year))})`)
+		
+		// draw light moon shape
+		poemG
+			.append("circle")
+			.classed("moonLight", true)
+			.attr("r", moonRad)
+		
+		// overlay moonface image
+		poemG.append("image")
+			.attr("x", -1 * moonRad)
+			.attr("y", -1 * moonRad)
+			.attr("width", 2 * moonRad)
+			.attr("height", 2 * moonRad)
+			.attr("xlink:href", moonface)
+		
+		// draw moon shade for phase based on sentiment analysis of poem
+		poemG.append("path")
+			.attr("d", (d) => DrawMoonShade(poemScale(parseFloat(d.poemscore)), 0, 0, moonRad))
+			.classed("moonShade", true)
+	
+		// DrawMoonShade(poemG, data, 0, 0, moonRad)
+		poemG
+			.append("text")
+			.text((d) => d.poemtitle)
+			.attr("text-anchor", "middle")
+			.attr("dy", "50px")
+	})
     
-    eclipseG
-        .append("circle")
-        .attr("cx", timelineColumns.eclipseWidth / 2)
-        .attr("cy", timelineColumns.eclipseHeight / 2)
-        .attr("r", (d) => radiusScale(parseInt(d.intensity)))
-        .attr("fill", "lightgray")
-
-    eclipseG
-        .append("text")
-        .attr("x", timelineColumns.eclipseWidth / 2)
-        .attr("y", timelineColumns.eclipseHeight / 2)
-        .text((d) => d.eclipse)
-        .attr("text-anchor", "middle")
-
-    var poetArea = timelineG
-        .append("g")
-        // .attr("transform", `translate(${margin.left}, ${margin.top})`)
-        .classed("poet-area", true)
-    
-    // --------Poet Column-------------
-    var poetG = poetArea
-        .selectAll("g")
-        .data(data)
-        .enter()
-        .append("g")
-        .attr("transform", (d) => `translate (${timelineColumns.eclipseWidth}, ${yScale(parseInt(d.birth))})`)
-
-    poetG
-        .append("text")
-        .attr("x", timelineColumns.poetWidth / 2)
-        .text((d) => `${d.poet}: ${d.birth}-${d.death}`)
-        .attr("text-anchor", "middle")
-
-
-    // -----Poem column of timeline-------
-
-    var poemArea = timelineG
-        .append("g")
-        // .attr("transform", `translate(${margin.left}, ${margin.top})`)
-        .classed("poem-area", true)
-    
-    // For each poem, create moon icons in phases based on positivity/negativity of poem sentiment analysis
-    moonRad = 50
-    moonPhase = .25
-
-    var poemG = poemArea
-        .selectAll("g")
-        .data(data)
-        .enter()
-        .append("g")
-        .attr("transform", (d) => `translate (${timelineColumns.eclipseWidth + timelineColumns.poetWidth + timelineColumns.poemWidth / 2}, ${yScale(parseInt(d.year))})`)
-    
-    // draw light moon shape
-    poemG
-        .append("circle")
-        .classed("moonLight", true)
-        .attr("r", moonRad)
-    
-    // overlay moonface image
-    poemG.append("image")
-        .attr("x", -1 * moonRad)
-        .attr("y", -1 * moonRad)
-        .attr("width", 2 * moonRad)
-        .attr("height", 2 * moonRad)
-        .attr("xlink:href", moonface)
-    
-    // draw moon shade for phase based on sentiment analysis of poem
-    poemG.append("path")
-        .attr("d", (d) => DrawMoonShade(poemScale(parseFloat(d.poemscore)), 0, 0, moonRad))
-        .classed("moonShade", true)
-
-    // DrawMoonShade(poemG, data, 0, 0, moonRad)
-    poemG
-        .append("text")
-        .text((d) => d.poemtitle)
-        .attr("text-anchor", "middle")
-        .attr("dy", "50px")
 })
+
+
 
 // --------Supporting functions for drawing eclipse maps-----------
 
