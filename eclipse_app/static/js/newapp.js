@@ -1,5 +1,6 @@
 
-mapboxgl.accessToken = 'pk.eyJ1IjoicmFjaGVsbGVlcmV5bm9sZHM4NSIsImEiOiJja2Y5dzI4OGYwMTlzMnFwZHFoN2NjanV5In0._9M8fGH_2Ge9l2lextgMLQ'
+const mapboxAccessToken = 'pk.eyJ1IjoicmFjaGVsbGVlcmV5bm9sZHM4NSIsImEiOiJja2Y5dzI4OGYwMTlzMnFwZHFoN2NjanV5In0._9M8fGH_2Ge9l2lextgMLQ'
+mapboxgl.accessToken = mapboxAccessToken
 
 const margin = {
     top: 100,
@@ -77,21 +78,82 @@ d3.json("static/data/eclipse_data.json").then((data) => {
 		.attr("height", 300)
 		.attr("width", 300)    
 
+
 	eclipseNames.forEach(eclipseName => {
-		var map = new mapboxgl.Map({
-			container: `eclipse-${eclipseName}`,
-			style: 'mapbox://styles/mapbox/light-v8',
-			center: [-90, 40],
-			  zoom: 2
-		});
-		// map.on('load', function () {
-		// 	map.resize();
-		// })
-	})
-	// Initialize mapbox
-	// var map = new mapboxgl.Map({
-	// 	container: 
-	// })
+		var eclipseIndex = data.findIndex((element) => element.date === eclipseName)
+		eclipseDate = `${eclipseName.slice(-2)}/${eclipseName.slice(4,6)}/${eclipseName.slice(0,4)}`
+		var mapData = [
+			{
+				type: "scattermapbox",
+				lon: data[eclipseIndex]["central_line"]["lons"],
+				lat: data[eclipseIndex]["central_line"]["lats"],
+				marker: {
+					color: "lightslategray",
+					line: {
+						width: 1,
+						color: "lightgray",
+					}, 
+					size: 12,
+				},
+			},
+			{
+				type: "scattermapbox",
+				lon: data[eclipseIndex]["northern_limit"]["lons"],
+				lat: data[eclipseIndex]["northern_limit"]["lats"],
+				marker: {
+					color: "lightgray",
+					line: {
+						width: 1,
+						color: "lightgray",
+					}, 
+					size: 2,
+				},
+			},
+			{
+				type: "scattermapbox",
+				lon: data[eclipseIndex]["southern_limit"]["lons"],
+				lat: data[eclipseIndex]["southern_limit"]["lats"],
+				marker: {
+					color: "lightgray",
+					line: {
+						width: 1,
+						color: "lightgray",
+					}, 
+					size: 2,
+				},
+			},
+		]
+		var mapLayout = {
+			title: {
+				text: eclipseDate,
+				font: {
+					color: "lightslategray",
+				},
+				yref: "paper",
+				y: "1",
+				yanchor: "top",
+			},
+			dragmode: "zoom",
+			mapbox: {
+				style: "dark",
+				center: {
+					lat: 35,
+					lon: -100,
+				},
+				zoom: 1,
+			},
+			margin: {
+				r: 0, t: 0, b: 0, l: 0
+			},
+			showlegend: false,
+		}
+		var mapboxConfig = {
+			mapboxAccessToken: mapboxAccessToken
+		}
+		Plotly.newPlot(`eclipse-${eclipseName}`, mapData, mapLayout, mapboxConfig)
+	});
+
+
 	
 	// ---------- ADD POETS AND POEMS FROM CSV FILE -----------
 	d3.csv("static/data/data.csv").then((data) => {
@@ -127,6 +189,7 @@ d3.json("static/data/eclipse_data.json").then((data) => {
 			.attr("x", timelineColumns.poetWidth / 2)
 			.text((d) => `${d.poet}: ${d.birth}-${d.death}`)
 			.attr("text-anchor", "middle")
+			.attr("fill", "whitesmoke")
 	
 	
 		// -----Poem column of timeline-------
@@ -172,6 +235,7 @@ d3.json("static/data/eclipse_data.json").then((data) => {
 			.text((d) => d.poemtitle)
 			.attr("text-anchor", "middle")
 			.attr("dy", "50px")
+			.attr("fill", "whitesmoke")
 	})
     
 })
