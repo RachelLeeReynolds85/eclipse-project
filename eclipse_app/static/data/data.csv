@@ -1,5 +1,11 @@
-year,eclipse,intensity,poet,poemtitle,poemscore,birth,death
-1800,solar,10,Whitman,O Captain My Captain,.5,1819,1892
-1850,solar,50,Dickinson,Kindly Stopped for Me,.1,1830,1886
-1900,lunar,80,Angelou,Caged Bird,.7,1928,2014
-1950,solar,20,Silverstein,Sidewalk,.99,1930,1999
+﻿year,eclipse,intensity,poet,poemtitle,poemscore,birth,death
+1800,solar,10,Whitman,O Captain My Captain,0.5,1819,1892
+1850,solar,50,Dickinson,Kindly Stopped for Me,0.1,1830,1886
+1900,lunar,80,Angelou,Caged Bird,0.7,1928,2014
+1950,solar,20,Silverstein,Sidewalk,0.99,1930,1999
+1840,,,George Eliot,Never Too Late,0.07,1820,
+1860,,,Thomas Hardy,The Convergence,0.29,1840,
+1888,,,WEB Du Bois,The Song of Smoke,0.61,1868,
+1980,,,Margaret Atwood,Handmaid,0.86,1939,
+1829,,,Edgar Allan Poe,Raven,0.17,1809,
+1837,,,Henry Thoreau,Simplify,0.24,1817,

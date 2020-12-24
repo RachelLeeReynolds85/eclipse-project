@@ -45,7 +45,8 @@ d3.json("static/data/eclipse_data.json").then((data) => {
 	.range([0, timelineHeight])
 
 	var yAxis = d3.axisLeft(yScale)
-        .tickFormat(d3.format(".0f"))
+		.tickFormat(d3.format(".0f"))
+		.ticks(100)
 
 	var yAxisG = timelineG.append("g").call(yAxis).classed("timeline-axis", true)
 	
@@ -89,6 +90,7 @@ d3.json("static/data/eclipse_data.json").then((data) => {
 				lat: data[eclipseIndex]["central_line"]["lats"],
 				marker: {
 					color: "lightslategray",
+					opacity: 0.5,
 					line: {
 						width: 1,
 						color: "lightgray",
@@ -130,7 +132,7 @@ d3.json("static/data/eclipse_data.json").then((data) => {
 					color: "lightslategray",
 				},
 				yref: "paper",
-				y: "1",
+				y: .95,
 				yanchor: "top",
 			},
 			dragmode: "zoom",
@@ -239,11 +241,6 @@ d3.json("static/data/eclipse_data.json").then((data) => {
 	})
     
 })
-
-
-
-// --------Supporting functions for drawing eclipse maps-----------
-
 
 
 // --------Supporting functions for drawing moon phases-----------
