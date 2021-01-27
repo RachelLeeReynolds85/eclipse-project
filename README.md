@@ -1,4 +1,8 @@
 ## Eclipse project
+[Link to Current App Deployment on Heroku](http://eclipse-poetry.herokuapp.com/)
+
+
+### Grouped/Visualized by...
 * by decade
 *	by poet
 *	text analysis of poems
@@ -6,15 +10,13 @@
 *	Show map with eclipse route
 *	Show poem text
 
----
-
+### Plans
 * other vizzes?
 * Scrolling?
 * Scrollable timeline
 * Days since eclipse vs sentiment metric (plotted with moons as points?)
 
----
-
+### Other Pages?
 * military memo length vs typewriter history
 * VanGogh paintings by color availability
 * Cartography — average color/tone of maps as more oceanic exploration (more blue/less land) - use avg pixel color in python
